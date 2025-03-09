@@ -1,0 +1,24 @@
+import { FileServer, Config as FsConfig } from "stdlib/fserver.cxy"
+import { Config, Server, Request, Response, Status } from "stdlib/http.cxy"
+import { Address } from "stdlib/net.cxy"
+import "stdlib/os.cxy"
+import "stdlib/json.cxy"
+import "stdlib/log.cxy"
+
+const LOG_TAG = "APP";
+
+func main(): !void {
+  var port = os.getenv("CXY_LISTEN_PORT", "80").toi[u16]();
+  var server = Server[()](Config{address: Address("0.0.0.0", port)});
+  @unused var fs = FileServer(&server, loadConfig());
+  server.start()
+}
+
+func loadConfig(): !FsConfig {
+  var configFile = os.getenv("CXY_FS_CONFIG", "/config/cxyfs.json");
+  var str = os.readAll(configFile) catch {
+    WRN!("Failed to read config file: " << configFile);
+    return FsConfig{}
+  }
+  return json.fromString[FsConfig](&str)
+}
