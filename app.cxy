@@ -1,0 +1,16 @@
+import { FileServer, Config as FsConfig } from "stdlib/fserver.cxy"
+import { Config, Server, Request, Response, Status } from "stdlib/http.cxy"
+import { Address } from "stdlib/net.cxy"
+import "stdlib/os.cxy"
+
+func main(): !void {
+  var port = os.getenv("CXY_LISTEN_PORT", "80").toi[u16]();
+  var wwwDir = os.getenv("CXY_WWW_DIR", "./www").str();
+  var server = Server[()](Config{address: Address("0.0.0.0", port)});
+  @unused var fs = FileServer(&server, FsConfig{
+    enableSendFile: true,
+    root: String(wwwDir),
+    rootRedirect: String("index.html")
+  });
+  server.start()
+}

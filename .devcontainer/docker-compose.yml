@@ -1,0 +1,20 @@
+services:
+  devel:
+    container_name: "cxyfs_dev"
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    volumes:
+      - ..:/workspace:cached
+    networks:
+      - build-net
+    mem_limit: 16g
+    ports:
+      - "8200-8209:8200-8209"
+      - "8222:22" # ssh
+    privileged: true
+    command: /bin/sh -c "while sleep 1000; do :; done"
+
+networks:
+  build-net:
+    driver: bridge
