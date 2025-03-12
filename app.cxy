@@ -10,12 +10,14 @@ const LOG_TAG = "APP";
 func main(): !void {
   var port = os.getenv("CXY_LISTEN_PORT", "80").toi[u16]();
   var server = Server[()](Config{address: Address("0.0.0.0", port)});
-  @unused var fs = FileServer(&server, loadConfig());
+  var fs = FileServer(&server, loadConfig());
+  fs.alias("/", "/index.html");
   server.start()
 }
 
 func loadConfig(): !FsConfig {
   var configFile = os.getenv("CXY_FS_CONFIG", "/config/cxyfs.json");
+  DBG!("Loading config: " << configFile);
   var str = os.readAll(configFile) catch {
     WRN!("Failed to read config file: " << configFile);
     return FsConfig{}
