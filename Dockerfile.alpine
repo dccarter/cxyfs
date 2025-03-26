@@ -1,0 +1,12 @@
+FROM suilteam/cxy:latest-alpine AS builder
+
+# Install packages
+RUN apk add --no-cache ruby-rake
+
+# Build the application
+COPY . /cxy
+WORKDIR /cxy
+RUN rake build
+
+FROM alpine:latest 
+COPY --from=builder /cxy/.build/cxyfs /usr/local/bin/cxyfs

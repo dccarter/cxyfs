@@ -1,0 +1,17 @@
+when:
+  - event: pull_request
+    branch: main
+
+steps:
+  build-cxyfs-alpine:
+    image: suilteam/cxy:alpine-latest
+    commands:
+      - apk add --no-cache ruby-rake
+      - rake build
+
+  build-cxyfs-ubuntu:
+    image: suilteam/cxy:ubuntu-latest
+    commands:
+      - apt-get update
+      - apt-get install -y rake
+      - rake build

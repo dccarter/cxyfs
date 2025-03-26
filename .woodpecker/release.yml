@@ -1,0 +1,18 @@
+when:
+  - event: tag
+    ref: refs/tags/v*
+
+matrix:
+  CXY_OS: [alpine, ubuntu]
+
+steps:
+  release_cxyfs_docker_image:
+    image: woodpecker/plugin-docker-buildx
+    settings:
+      repo: suilteam/cxyfs
+      dockerfile: Dockerfile.${CXY_OS}
+      username:
+        - from_secret: DOCKERHUB_USERNAME
+      password:
+        - from_secret: DOCKERHUB_TOKEN
+      tags: ${CXY_OS}-latest,${CXY_OS}-${CI_COMMIT_TAG}
