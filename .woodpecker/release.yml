@@ -7,12 +7,16 @@ matrix:
 
 steps:
   release_cxyfs_docker_image:
-    image: woodpecker/plugin-docker-buildx
-    settings:
-      repo: suilteam/cxyfs
-      dockerfile: Dockerfile.${CXY_OS}
-      username:
-        - from_secret: DOCKERHUB_USERNAME
-      password:
-        - from_secret: DOCKERHUB_TOKEN
-      tags: ${CXY_OS}-latest,${CXY_OS}-${CI_COMMIT_TAG}
+    image: docker
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      DOCKERHUB_USERNAME:
+        from_secret: DOCKERHUB_USERNAME
+      DOCKERHUB_TOKEN:
+        from_secret: DOCKERHUB_TOKEN
+    commands:
+      - docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_TOKEN
+      - docker build -t suilteam/cxyfs:${CXY_OS}-latest -t suilteam/cxyfs:${CXY_OS}-${CI_COMMIT_TAG} -f Dockerfile.${CXY_OS} .
+      - docker push suilteam/cxyfs:${CXY_OS}-latest
+      - docker push suilteam/cxyfs:${CXY_OS}-${CI_COMMIT_TAG}
