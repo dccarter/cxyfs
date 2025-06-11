@@ -16,6 +16,7 @@ steps:
       DOCKERHUB_TOKEN:
         from_secret: DOCKERHUB_TOKEN
     commands:
+      - docker pull  suilteam/cxy:latest-${CXY_OS}
       - docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_TOKEN
       - docker build  --build-arg RELEASE_TAG=${CI_COMMIT_TAG} -t suilteam/cxyfs:${CXY_OS}-latest -t suilteam/cxyfs:${CXY_OS}-${CI_COMMIT_TAG} -f Dockerfile.${CXY_OS} .
       - docker push suilteam/cxyfs:${CXY_OS}-latest
