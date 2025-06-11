@@ -9,5 +9,14 @@ COPY . /cxy
 WORKDIR /cxy
 RUN rake build
 
-FROM ubuntu:latest 
+FROM ubuntu:latest
+# Build arguments
+ARG RELEASE_TAG=v0.1.0
+
+# Set environment variables
+ENV RELEASE_TAG=${RELEASE_TAG}
+
+# Set labels
+LABEL version="${RELEASE_TAG}"
+
 COPY --from=builder /cxy/.build/cxyfs /usr/local/bin/cxyfs
