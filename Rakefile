@@ -9,6 +9,6 @@ end
 task :build do
   puts "Building Cxy File Server..."
   version = (ENV['CXY_FS_VERION'] || '0.1.0').delete_prefix('v')
-  system("cxy", "build", "app.cxy", "--build-dir", CXY_BUILD_DIR, "--with-mm", "-o", "cxyfs", "-g",
-          "-DCXY_FILE_SERVER_ROUTE=\"/\"", "-DCXY_FS_VERION=\"#{version}\"") 
+  system("cxy", "build", "app.cxy", "--build-dir", CXY_BUILD_DIR, "-o", "cxyfs", "-g",
+          "-DCXY_FILE_SERVER_ROUTE=\"/\"", "-DCXY_FS_VERION=\"#{version}\"")
 end
