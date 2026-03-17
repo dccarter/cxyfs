@@ -1,0 +1,35 @@
+package:
+  name: cxyfs
+  version: 0.1.0
+  license: MIT
+
+builds:
+  app:
+    entry: app.cxy
+    output: cxyfs
+    defines:
+      - 'APP_VERSION="0.1.0"'
+      - 'CXY_FILE_SERVER_ROUTE=\"/\"'
+
+dependencies: []
+
+tests:
+  - file: "app.cxy"
+
+scripts:
+  env:
+    BUILD_DIR: "{{SOURCE_DIR}}/.cxy/build"
+
+  build:
+    inputs:
+      - app.cxy
+    outputs:
+      - "{{BUILD_DIR}}/cxyfs"
+    command: cxy package build app
+
+  release:
+    depends: [build]
+    command: |
+      echo "Releasing cxyfs binary {{BUILD_DIR}}/cxyfs"
+      mkdir -p {{SOURCE_DIR}}/.cxy/artifacts
+      cp {{BUILD_DIR}}/cxyfs {{SOURCE_DIR}}/.cxy/artifacts

@@ -6,7 +6,7 @@ RUN apk add --no-cache ruby-rake
 # Build the application
 COPY . /cxy
 WORKDIR /cxy
-RUN rake build
+RUN cxy package run release --no-cache
 
 FROM alpine:latest
 # Build arguments
@@ -18,4 +18,4 @@ ENV RELEASE_TAG=${RELEASE_TAG}
 # Set labels
 LABEL version="${RELEASE_TAG}"
 
-COPY --from=builder /cxy/.build/cxyfs /usr/local/bin/cxyfs
+COPY --from=builder /cxy/.cxy/artifacts/cxyfs /usr/local/bin/cxyfs

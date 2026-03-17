@@ -15,14 +15,10 @@ jobs:
     container:
       image: suilteam/cxy:latest-ubuntu
     steps:
-      - name: Install dependencies
-        run: |
-          apt-get update
-          apt-get install -y ruby
       - name: Check out the repo
         uses: actions/checkout@v4
 
       - name: Build and run tests
         working-directory: ${{github.workspace}}
         run: |
-          rake build
+          cxy package build
